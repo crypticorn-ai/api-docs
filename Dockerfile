@@ -6,11 +6,11 @@ RUN npm install -g pnpm && \
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+COPY docs/api/package.json docs/api/pnpm-lock.yaml ./
 
 RUN pnpm install --frozen-lockfile
 
-COPY . .
+COPY docs/api .
 
 RUN pnpm run build
 
