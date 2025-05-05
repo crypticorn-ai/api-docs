@@ -1,0 +1,17 @@
+{
+  "name": "@crypticorn-ai/api-docs",
+  "private": true,
+  "version": "1.0.0",
+  "description": "API Documentation for Crypticorn",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@scalar/api-reference": "^1.28.8",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0"
+  }
+}
