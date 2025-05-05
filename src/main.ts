@@ -1,5 +1,4 @@
 import { createApiReference } from "@scalar/api-reference";
-import { Service } from "../../../typescript/src/common/enums";
 
 // Configuration
 export const CONFIG = {
@@ -13,12 +12,12 @@ export const CONFIG = {
 
 // API endpoints and titles with version
 export const API_ENDPOINTS = [
-  { service: Service.HIVE, title: "Hive AI API", version: "v1" },
-  { service: Service.KLINES, title: "Klines API", version: "v1" },
-  { service: Service.METRICS, title: "Metrics API", version: "v1" },
-  { service: Service.TRADE, title: "Trading API", version: "v1" },
-  { service: Service.PAY, title: "Payment API", version: "v1" },
-  { service: Service.AUTH, title: "Auth API", version: "v1" },
+  { service: "hive", title: "Hive AI API", version: "v1" },
+  { service: "klines", title: "Klines API", version: "v1" },
+  { service: "metrics", title: "Metrics API", version: "v1" },
+  { service: "trade", title: "Trading API", version: "v1" },
+  { service: "pay", title: "Payment API", version: "v1" },
+  { service: "auth", title: "Auth API", version: "v1" },
   // Disabled endpoints
   // { service: 'sentiment', title: 'Sentiment API', version: 'v1' },
   // { service: 'market', title: 'Market Data API', version: 'v1' },
