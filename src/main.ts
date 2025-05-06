@@ -26,11 +26,7 @@ export const API_ENDPOINTS = [
 
 // Server configuration utilities
 function getServerConfigs(prefix: string) {
-  const servers: Record<string, { url: string; description: string }> = {
-    prod: {
-      url: `${CONFIG.baseUrls.prod}${prefix}`,
-      description: "Production",
-    },
+  let servers: Record<string, { url: string; description: string }> = {
     dev: {
       url: `${CONFIG.baseUrls.dev}${prefix}`,
       description: "Development",
@@ -39,7 +35,19 @@ function getServerConfigs(prefix: string) {
       url: `${CONFIG.baseUrls.local}${prefix}`,
       description: "Localhost",
     },
+    prod: {
+      url: `${CONFIG.baseUrls.prod}${prefix}`,
+      description: "Production",
+    },
   };
+  // if local, move to the first position (default arg does not work :/)
+  if (CONFIG.env === "local") {
+    servers = {
+      local: servers.local,
+      dev: servers.dev,
+      prod: servers.prod,
+    };
+  }
 
   // Filter servers based on environment
   // if prod drop dev and local
