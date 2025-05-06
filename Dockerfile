@@ -13,6 +13,9 @@ RUN pnpm install --frozen-lockfile
 COPY docs/api .
 COPY static ./static
 
+ARG VITE_API_ENV
+ENV VITE_API_ENV=$VITE_API_ENV
+
 RUN pnpm run build
 
 FROM alpine:latest
