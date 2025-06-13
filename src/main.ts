@@ -18,6 +18,7 @@ export const API_ENDPOINTS = [
   { service: "trade", title: "Trading API", version: "v1" },
   { service: "pay", title: "Payment API", version: "v1" },
   { service: "auth", title: "Auth API", version: "v1" },
+  { service: "dex", title: "DEX API", version: "v1" },
   // Disabled endpoints
   // { service: 'sentiment', title: 'Sentiment API', version: 'v1' },
   // { service: 'market', title: 'Market Data API', version: 'v1' },
