@@ -5,7 +5,7 @@ export const CONFIG = {
   baseUrls: {
     dev: "https://api.crypticorn.dev",
     prod: "https://api.crypticorn.com",
-    local: "http://localhost",
+    local: "http://host.docker.internal",
   },
   env: import.meta.env.VITE_API_ENV as "dev" | "prod" | "local",
 };
