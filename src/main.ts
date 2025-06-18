@@ -5,9 +5,8 @@ export const CONFIG = {
   baseUrls: {
     dev: "https://api.crypticorn.dev",
     prod: "https://api.crypticorn.com",
-    local: "http://host.docker.internal",
   },
-  env: import.meta.env.VITE_API_ENV as "dev" | "prod" | "local",
+  env: import.meta.env.VITE_API_ENV as "dev" | "prod",
 };
 
 // API endpoints and titles with version
@@ -32,23 +31,11 @@ function getServerConfigs(prefix: string) {
       url: `${CONFIG.baseUrls.dev}${prefix}`,
       description: "Development",
     },
-    local: {
-      url: `${CONFIG.baseUrls.local}${prefix}`,
-      description: "Localhost",
-    },
     prod: {
       url: `${CONFIG.baseUrls.prod}${prefix}`,
       description: "Production",
     },
   };
-  // if local, move to the first position (default arg does not work :/)
-  if (CONFIG.env === "local") {
-    servers = {
-      local: servers.local,
-      dev: servers.dev,
-      prod: servers.prod,
-    };
-  }
 
   // Filter servers based on environment
   // if prod drop dev and local
@@ -59,7 +46,6 @@ function getServerConfigs(prefix: string) {
 
   if (CONFIG.env === "prod") {
     delete servers.dev;
-    delete servers.local;
   }
   // convert to an array
   return Object.values(servers);
