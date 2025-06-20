@@ -82,7 +82,9 @@ async function initializeApiReference() {
         content: JSON.stringify(docs[index]),
       })),
       // hideModels: true,
-      preferredSecurityScheme: "APIKeyHeader",
+      authentication: {
+        preferredSecurityScheme: "APIKeyHeader",
+      },
       operationsSorter: (a: any, b: any) => {
         return a.operationId.length - b.operationId.length;
       }, // sort by operationId length ascending (usually the longer the operationId, the more complex the endpoint)
