@@ -76,12 +76,22 @@ async function initializeApiReference() {
 
     // Create reference with all docs
     createApiReference("#app", {
+      // https://guides.scalar.com/scalar/scalar-api-references/configuration
       sources: API_ENDPOINTS.map((endpoint, index) => ({
         title: endpoint.title,
         content: JSON.stringify(docs[index]),
       })),
+      // hideModels: true,
+      preferredSecurityScheme: "APIKeyHeader",
+      operationsSorter: (a: any, b: any) => {
+        return a.operationId.length - b.operationId.length;
+      }, // sort by operationId length ascending (usually the longer the operationId, the more complex the endpoint)
+      hideClientButton: true,
+      // persistAuth: true,
+      // withDefaultFonts: false
       // Proxy option (commented out)
       // proxyUrl: 'https://proxy.scalar.com',
+      // plugins: [plugin],
     });
   } catch (error) {
     console.error("Failed to initialize API reference:", error);
