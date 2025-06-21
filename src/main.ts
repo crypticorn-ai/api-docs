@@ -1,4 +1,5 @@
 import { createApiReference } from "@scalar/api-reference";
+import { manipulateDoc as manipulatePythonDoc } from "./python";
 
 // Configuration
 export const CONFIG = {
@@ -12,13 +13,13 @@ export const CONFIG = {
 // API endpoints and titles with version
 export const API_ENDPOINTS = [
   { service: "hive", title: "Hive AI API", version: "v1" },
-  { service: "klines", title: "Klines API", version: "v1" },
   { service: "metrics", title: "Metrics API", version: "v1" },
   { service: "trade", title: "Trading API", version: "v1" },
   { service: "pay", title: "Payment API", version: "v1" },
   { service: "auth", title: "Auth API", version: "v1" },
   { service: "dex", title: "DEX API", version: "v1" },
   // Disabled endpoints
+  // { service: "klines", title: "Klines API", version: "v1" },
   // { service: 'sentiment', title: 'Sentiment API', version: 'v1' },
   // { service: 'market', title: 'Market Data API', version: 'v1' },
   // { service: 'google', title: 'Google Trends API', version: 'v1' },
@@ -58,9 +59,13 @@ async function fetchDoc(service: string, version: string): Promise<any> {
   const url = `${root}${prefix}/openapi.json`;
 
   const res = await fetch(url);
-  const data = await res.json();
+  let data = await res.json();
+  // for testing purposes, we can import a local file
+  // let importedData = await import("./test-doc.json");
+  // let data = { ...importedData.default || importedData };
 
   data.servers = getServerConfigs(prefix);
+  data = await manipulatePythonDoc(data, service);
   return data;
 }
 
