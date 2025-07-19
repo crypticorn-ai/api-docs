@@ -15,13 +15,13 @@ export const CONFIG = {
 
 // API endpoints and titles with version
 export const API_ENDPOINTS = [
-  // { service: "hive", title: "Hive AI API", version: "v1" },
-  // { service: "metrics", title: "Metrics API", version: "v1" },
-  // { service: "trade", title: "Trading API", version: "v1" },
+  { service: "hive", title: "Hive AI API", version: "v1" },
+  { service: "metrics", title: "Metrics API", version: "v1" },
+  { service: "trade", title: "Trading API", version: "v1" },
   { service: "pay", title: "Payment API", version: "v1" },
   { service: "auth", title: "Auth API", version: "v1" },
-  // { service: "dex", title: "DEX API", version: "v1" },
-  // { service: "notification", title: "Notification API", version: "v1" },
+  { service: "dex", title: "DEX API", version: "v1" },
+  { service: "notification", title: "Notification API", version: "v1" },
   // Disabled endpoints
   // { service: "klines", title: "Klines API", version: "v1" },
   // { service: 'sentiment', title: 'Sentiment API', version: 'v1' },
