@@ -1,0 +1,1964 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Marketcap Service API",
+    "description": "API for retrieving historical marketcap data, available exchanges, and indicators.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/v1/metrics"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Status"],
+        "summary": "Ping",
+        "description": "Returns 'OK' if the API is running.",
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "title": "Response Ping"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/time": {
+      "get": {
+        "tags": ["Status"],
+        "summary": "Time",
+        "description": "Returns the current time in either ISO or Unix timestamp (seconds) format.",
+        "operationId": "getTime",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": ["iso", "unix"],
+              "type": "string",
+              "default": "iso",
+              "title": "Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "title": "Response Gettime"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/log-level": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Logging Level",
+        "description": "Get the log level of the server logger. Will be removed in a future release.",
+        "operationId": "getLogLevel",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogLevel"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "Basic": []
+          },
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/admin/uptime": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Uptime",
+        "description": "Return the server uptime in seconds or human-readable form.",
+        "operationId": "getUptime",
+        "security": [
+          {
+            "Basic": []
+          },
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": ["seconds", "human"],
+              "type": "string",
+              "default": "seconds",
+              "title": "Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "title": "Response Getuptime"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/memory": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Memory Usage",
+        "description": "Resident Set Size (RSS) in MB — the actual memory used by the process in RAM.\nRepresents the physical memory footprint. Important for monitoring real usage.",
+        "operationId": "getMemoryUsage",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "title": "Response Getmemoryusage"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": []
+          },
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/admin/threads": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Threads",
+        "description": "Return count and names of active threads.",
+        "operationId": "getThreads",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Getthreads"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": []
+          },
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/admin/limits": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Container Limits",
+        "description": "Return container resource limits from cgroup.",
+        "operationId": "getContainerLimits",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Getcontainerlimits"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": []
+          },
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/admin/dependencies": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "List Installed Packages",
+        "description": "Return a list of installed packages and versions.\n\nThe include parameter accepts regex patterns to match against package names.\nFor example:\n- crypticorn.* will match all packages starting with 'crypticorn'\n- .*tic.* will match all packages containing 'tic' in their name",
+        "operationId": "getDependencies",
+        "security": [
+          {
+            "Basic": []
+          },
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of regex patterns to match against package names. If not provided, all installed packages will be returned.",
+              "title": "Include"
+            },
+            "description": "List of regex patterns to match against package names. If not provided, all installed packages will be returned."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Getdependencies"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/metrics": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Metrics",
+        "description": "Get Prometheus metrics for the application. Returns plain text.",
+        "operationId": "getMetrics",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": []
+          },
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/marketcap/current": {
+      "get": {
+        "tags": ["Marketcap"],
+        "summary": "Get Current Marketcap",
+        "description": "Retrieve current marketcap data for all symbols.",
+        "operationId": "get_current_marketcap",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Number of top symbols to fetch (1-100)",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Number of top symbols to fetch (1-100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Get Current Marketcap"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marketcap/symbols": {
+      "get": {
+        "tags": ["Marketcap"],
+        "summary": "Get Symbols Marketcap Between Timestamps",
+        "description": "Retrieve a ranking of symbols by marketcap between timestamps.",
+        "operationId": "get_marketcap_symbols",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Start timestamp",
+              "default": 1750187766,
+              "title": "Start Timestamp"
+            },
+            "description": "Start timestamp"
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "End timestamp",
+              "default": 1750360566,
+              "title": "End Timestamp"
+            },
+            "description": "End timestamp"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Interval for which to fetch symbols and marketcap data",
+              "enum": ["1d", "1h"],
+              "default": "1d",
+              "title": "Interval"
+            },
+            "description": "Interval for which to fetch symbols and marketcap data"
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market for which to fetch symbols and marketcap data. Defaults to futures.",
+              "default": "futures"
+            },
+            "description": "Market for which to fetch symbols and marketcap data. Defaults to futures."
+          },
+          {
+            "name": "exchange",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Exchange for which to fetch symbols and marketcap data. If not provided, all exchanges will be returned.",
+              "enum": [
+                "binance",
+                "kucoin",
+                "gate.io",
+                "bybit",
+                "bingx",
+                "bitget"
+              ],
+              "title": "Exchange"
+            },
+            "description": "Exchange for which to fetch symbols and marketcap data. If not provided, all exchanges will be returned."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarketcapSymbolRanking"
+                  },
+                  "title": "Response Get Marketcap Symbols"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marketcap/symbols/ohlcv": {
+      "get": {
+        "tags": ["Marketcap"],
+        "summary": "Get Symbols Marketcap With Ohlcv",
+        "description": "Retrieve OHLCV data with marketcap for symbols at a specific timestamp.",
+        "operationId": "get_marketcap_symbols_with_ohlcv",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Timestamp for which to fetch symbols and OHLCV data",
+              "default": 1750360566,
+              "title": "Timestamp"
+            },
+            "description": "Timestamp for which to fetch symbols and OHLCV data"
+          },
+          {
+            "name": "timeframe",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Timeframe for OHLCV data",
+              "default": "1h",
+              "title": "Timeframe"
+            },
+            "description": "Timeframe for OHLCV data"
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market for OHLCV data. Defaults to futures.",
+              "default": "futures"
+            },
+            "description": "Market for OHLCV data. Defaults to futures."
+          },
+          {
+            "name": "top_n",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Number of symbols to fetch",
+              "default": 10,
+              "title": "Top N"
+            },
+            "description": "Number of symbols to fetch"
+          },
+          {
+            "name": "ohlcv_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Number of OHLCV data points to fetch",
+              "default": 100,
+              "title": "Ohlcv Limit"
+            },
+            "description": "Number of OHLCV data points to fetch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/OHLCV"
+                    }
+                  },
+                  "title": "Response Get Marketcap Symbols With Ohlcv"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marketcap": {
+      "get": {
+        "tags": ["Marketcap"],
+        "summary": "Get Marketcap Between Timestamps",
+        "description": "Retrieve marketcap data between timestamps.",
+        "operationId": "get_marketcap_between_timestamps",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Start timestamp",
+              "default": 1750187766,
+              "title": "Start Timestamp"
+            },
+            "description": "Start timestamp"
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "End timestamp",
+              "default": 1750360566,
+              "title": "End Timestamp"
+            },
+            "description": "End timestamp"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarketcapRanking"
+                  },
+                  "title": "Response Get Marketcap Between Timestamps"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/indicators/ker": {
+      "get": {
+        "tags": ["Indicators"],
+        "summary": "Get Ker Indicator",
+        "description": "Calculate and retrieve the KER indicator for a symbol.",
+        "operationId": "get_ker_indicator",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Symbol to fetch KER indicator for",
+              "title": "Symbol"
+            },
+            "description": "Symbol to fetch KER indicator for"
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market. Defaults to futures.",
+              "default": "futures"
+            },
+            "description": "Market. Defaults to futures."
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "KER indicator period",
+              "default": 15,
+              "title": "Period"
+            },
+            "description": "KER indicator period"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Timestamp for which to fetch KER indicator",
+              "default": 1750360566,
+              "title": "Timestamp"
+            },
+            "description": "Timestamp for which to fetch KER indicator"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Ker Indicator"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/indicators/sma": {
+      "get": {
+        "tags": ["Indicators"],
+        "summary": "Get Sma Indicator",
+        "description": "Calculate and retrieve the Simple Moving Average (SMA) indicator for a symbol.",
+        "operationId": "get_sma_indicator",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Symbol to fetch SMA indicator for",
+              "title": "Symbol"
+            },
+            "description": "Symbol to fetch SMA indicator for"
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "The market type to use for the SMA indicator",
+              "default": "futures"
+            },
+            "description": "The market type to use for the SMA indicator"
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The period to use for the SMA indicator",
+              "default": 15,
+              "title": "Period"
+            },
+            "description": "The period to use for the SMA indicator"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The timestamp for which to fetch the SMA indicator",
+              "default": 1750360566,
+              "title": "Timestamp"
+            },
+            "description": "The timestamp for which to fetch the SMA indicator"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Sma Indicator"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exchanges/available": {
+      "get": {
+        "tags": ["Exchanges"],
+        "summary": "Get Available Exchanges",
+        "description": "Get available exchanges for a symbol with various filtering options.",
+        "operationId": "get_available_exchanges",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "market",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market type (spot or futures)"
+            },
+            "description": "Market type (spot or futures)"
+          },
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Symbol to fetch available exchanges for",
+              "title": "Symbol"
+            },
+            "description": "Symbol to fetch available exchanges for"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TimeInterval",
+              "description": "Interval for which to fetch available exchanges",
+              "default": "1d"
+            },
+            "description": "Interval for which to fetch available exchanges"
+          },
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Start timestamp for which to fetch available exchanges (defaults to previous 7 day's closing)",
+              "default": 1749686400,
+              "title": "Start Timestamp"
+            },
+            "description": "Start timestamp for which to fetch available exchanges (defaults to previous 7 day's closing)"
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "End timestamp for which to fetch available exchanges",
+              "default": 1750360566,
+              "title": "End Timestamp"
+            },
+            "description": "End timestamp for which to fetch available exchanges"
+          },
+          {
+            "name": "quote_currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quote currency for which to fetch available exchanges (Use quote currencies endpoint to get available quote currencies)",
+              "default": "USDT",
+              "title": "Quote Currency"
+            },
+            "description": "Quote currency for which to fetch available exchanges (Use quote currencies endpoint to get available quote currencies)"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TradingStatus",
+              "description": "Trading pair status for which to fetch available exchanges",
+              "default": "ACTIVE"
+            },
+            "description": "Trading pair status for which to fetch available exchanges"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExchangeAvailability"
+                  },
+                  "title": "Response Get Available Exchanges"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exchanges/mappings": {
+      "get": {
+        "tags": ["Exchanges"],
+        "summary": "Get Exchange Mappings",
+        "description": "Get exchange mappings for a market with optional exchange name filter.",
+        "operationId": "get_exchange_mappings",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "market",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market type (spot or futures)"
+            },
+            "description": "Market type (spot or futures)"
+          },
+          {
+            "name": "exchange",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/InternalExchange",
+              "description": "Exchange name for which to fetch exchange mappings"
+            },
+            "description": "Exchange name for which to fetch exchange mappings"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExchangeMapping"
+                  },
+                  "title": "Response Get Exchange Mappings"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exchanges/list": {
+      "get": {
+        "tags": ["Exchanges"],
+        "summary": "Get Exchange List",
+        "description": "Get list of exchanges for a market.",
+        "operationId": "get_available_exchanges_for_market",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "market",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market type (spot or futures)"
+            },
+            "description": "Market type (spot or futures)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response Get Available Exchanges For Market"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exchanges/pair-mappings": {
+      "get": {
+        "tags": ["Exchanges"],
+        "summary": "Get Exchange Mappings For Pair",
+        "description": "Get exchange mappings for a specific trading pair across all exchanges or a specific exchange.\nThis endpoint finds the underlying symbol for a given pair and returns all perpetual contracts\n(excluding quarterly/dated contracts) with the specified quote currency.",
+        "operationId": "get_exchange_mappings_for_pair",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Trading pair to find mappings for. Can be exchange specific (e.g., 'BTCUSDT', '1000SHIBUSDT') or a common format Symbol/QuoteCurrency (e.g., 'BTC/USDT')",
+              "title": "Pair"
+            },
+            "description": "Trading pair to find mappings for. Can be exchange specific (e.g., 'BTCUSDT', '1000SHIBUSDT') or a common format Symbol/QuoteCurrency (e.g., 'BTC/USDT')"
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market type (spot or futures). Defaults to futures.",
+              "default": "futures"
+            },
+            "description": "Market type (spot or futures). Defaults to futures."
+          },
+          {
+            "name": "exchange",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/InternalExchange",
+              "description": "Optional exchange name to filter by. If not provided, returns all exchanges a match was found for."
+            },
+            "description": "Optional exchange name to filter by. If not provided, returns all exchanges a match was found for."
+          },
+          {
+            "name": "quote_currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quote currency to filter by. Defaults to USDT.",
+              "default": "USDT",
+              "title": "Quote Currency"
+            },
+            "description": "Quote currency to filter by. Defaults to USDT."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExchangeMapping"
+                  },
+                  "title": "Response Get Exchange Mappings For Pair"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tokens/stables": {
+      "get": {
+        "tags": ["Tokens"],
+        "summary": "Get Stable Tokens",
+        "description": "Get list of stable tokens.",
+        "operationId": "get_stable_tokens",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Stable Tokens"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/tokens/wrapped": {
+      "get": {
+        "tags": ["Tokens"],
+        "summary": "Get Wrapped Tokens",
+        "description": "Get list of wrapped tokens.",
+        "operationId": "get_wrapped_tokens",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Wrapped Tokens"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/quote-currencies": {
+      "get": {
+        "tags": ["Quote Currencies"],
+        "summary": "Get Quote Currencies",
+        "description": "Get available quote currencies for a market.",
+        "operationId": "get_quote_currencies",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "market",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market type (spot or futures)"
+            },
+            "description": "Market type (spot or futures)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response Get Quote Currencies"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/markets": {
+      "get": {
+        "tags": ["Markets"],
+        "summary": "Get Markets For Symbol",
+        "description": "Get markets for a symbol with filtering options.",
+        "operationId": "get_available_markets_for_symbol",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "market",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/MarketType",
+              "description": "Market type (spot or futures)"
+            },
+            "description": "Market type (spot or futures)"
+          },
+          {
+            "name": "ticker",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Ticker to fetch markets for. Strip the quote currency from the ticker.",
+              "title": "Ticker"
+            },
+            "description": "Ticker to fetch markets for. Strip the quote currency from the ticker."
+          },
+          {
+            "name": "quote_currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quote currency for which to fetch markets",
+              "default": "USDT",
+              "title": "Quote Currency"
+            },
+            "description": "Quote currency for which to fetch markets"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TradingStatus",
+              "description": "Trading pair status for which to fetch markets",
+              "default": "ACTIVE"
+            },
+            "description": "Trading pair status for which to fetch markets"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Get Available Markets For Symbol"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/error_logs": {
+      "get": {
+        "tags": ["Logs"],
+        "summary": "Get Error Logs",
+        "description": "Get error logs with filtering options.",
+        "operationId": "get_metrics_error_logs",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "severity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Severity",
+              "description": "Severity level of errors to fetch"
+            },
+            "description": "Severity level of errors to fetch"
+          },
+          {
+            "name": "start_timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Start timestamp for which to fetch error logs",
+              "default": 1750274166,
+              "title": "Start Timestamp"
+            },
+            "description": "Start timestamp for which to fetch error logs"
+          },
+          {
+            "name": "end_timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "End timestamp for which to fetch error logs",
+              "default": 1750360566,
+              "title": "End Timestamp"
+            },
+            "description": "End timestamp for which to fetch error logs"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Get Metrics Error Logs"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExceptionDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiErrorIdentifier": {
+        "type": "string",
+        "enum": [
+          "allocation_below_current_exposure",
+          "allocation_below_min_amount",
+          "allocation_limit_exceeded",
+          "black_swan",
+          "bot_already_deleted",
+          "bot_stopping_completed",
+          "bot_stopping_started",
+          "cancelled_open_order",
+          "client_order_id_already_exists",
+          "invalid_content_type",
+          "delete_bot_error",
+          "exchange_http_request_error",
+          "exchange_invalid_parameter",
+          "exchange_invalid_signature",
+          "exchange_invalid_timestamp",
+          "exchange_ip_address_is_not_authorized",
+          "exchange_key_already_exists",
+          "exchange_key_in_use",
+          "exchange_system_under_maintenance",
+          "exchange_rate_limit_exceeded",
+          "insufficient_permissions_spot_and_futures_required",
+          "exchange_service_temporarily_unavailable",
+          "exchange_system_is_busy",
+          "exchange_system_configuration_error",
+          "exchange_internal_system_error",
+          "exchange_user_account_is_frozen",
+          "api_key_expired",
+          "bearer_token_expired",
+          "failed_open_order",
+          "forbidden",
+          "hedge_mode_not_active",
+          "insufficient_balance",
+          "insufficient_margin",
+          "insufficient_scopes",
+          "invalid_api_key",
+          "invalid_basic_auth",
+          "invalid_bearer",
+          "invalid_data",
+          "invalid_data_response",
+          "invalid_exchange_key",
+          "invalid_model_name",
+          "leverage_limit_exceeded",
+          "order_violates_liquidation_price_constraints",
+          "margin_mode_clash",
+          "name_not_unique",
+          "no_credentials",
+          "now_api_down",
+          "object_already_exists",
+          "object_created",
+          "object_deleted",
+          "object_locked",
+          "object_not_found",
+          "object_updated",
+          "order_is_already_filled",
+          "order_is_being_processed",
+          "order_quantity_limit_exceeded",
+          "order_does_not_exist",
+          "order_price_is_invalid",
+          "order_size_too_large",
+          "order_size_too_small",
+          "orphan_open_order",
+          "orphan_close_order",
+          "position_limit_exceeded",
+          "position_does_not_exist",
+          "position_opening_temporarily_suspended",
+          "post_only_order_would_immediately_match",
+          "request_scope_limit_exceeded",
+          "risk_limit_exceeded",
+          "rpc_timeout",
+          "system_settlement_in_process",
+          "strategy_disabled",
+          "strategy_leverage_mismatch",
+          "strategy_not_supporting_exchange",
+          "success",
+          "symbol_does_not_exist",
+          "trading_action_expired",
+          "trading_action_skipped_bot_stopping",
+          "trading_has_been_locked",
+          "trading_is_suspended",
+          "unknown_error_occurred",
+          "requested_resource_not_found"
+        ],
+        "title": "ApiErrorIdentifier",
+        "description": "Unique identifier of the API error."
+      },
+      "ApiErrorLevel": {
+        "type": "string",
+        "enum": ["error", "info", "success", "warning"],
+        "title": "ApiErrorLevel",
+        "description": "Level of the API error."
+      },
+      "ApiErrorType": {
+        "type": "string",
+        "enum": ["user error", "exchange error", "server error", "no error"],
+        "title": "ApiErrorType",
+        "description": "Type of the API error."
+      },
+      "ExceptionDetail": {
+        "properties": {
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message",
+            "description": "An additional error message"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ApiErrorIdentifier",
+            "description": "The unique error code"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ApiErrorType",
+            "description": "The type of error"
+          },
+          "level": {
+            "$ref": "#/components/schemas/ApiErrorLevel",
+            "description": "The level of the error"
+          },
+          "status_code": {
+            "type": "integer",
+            "title": "Status Code",
+            "description": "The HTTP status code"
+          },
+          "details": {
+            "title": "Details",
+            "description": "Additional details about the error"
+          }
+        },
+        "type": "object",
+        "required": ["code", "type", "level", "status_code"],
+        "title": "ExceptionDetail",
+        "description": "Exception details returned to the client."
+      },
+      "ExchangeAvailability": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp",
+            "description": "The timestamp of the availability"
+          },
+          "exchanges": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object",
+            "title": "Exchanges",
+            "description": "The availability of the exchange. Returns a dictionary of exchange names and their availability as a boolean."
+          }
+        },
+        "type": "object",
+        "required": ["timestamp", "exchanges"],
+        "title": "ExchangeAvailability"
+      },
+      "ExchangeMapping": {
+        "properties": {
+          "exchange_name": {
+            "type": "string",
+            "title": "Exchange Name",
+            "description": "The name of the exchange"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol",
+            "description": "The symbol of the exchange"
+          },
+          "quote_currency": {
+            "type": "string",
+            "title": "Quote Currency",
+            "description": "The quote currency of the exchange"
+          },
+          "pair": {
+            "type": "string",
+            "title": "Pair",
+            "description": "The pair of the exchange"
+          },
+          "first_trade_timestamp": {
+            "type": "integer",
+            "title": "First Trade Timestamp",
+            "description": "The first trade timestamp of the exchange"
+          },
+          "last_trade_timestamp": {
+            "type": "integer",
+            "title": "Last Trade Timestamp",
+            "description": "The last trade timestamp of the exchange"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TradingStatus",
+            "description": "The status of the exchange"
+          },
+          "market_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MarketType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The market type of the exchange"
+          }
+        },
+        "type": "object",
+        "required": [
+          "exchange_name",
+          "symbol",
+          "quote_currency",
+          "pair",
+          "first_trade_timestamp",
+          "last_trade_timestamp",
+          "status"
+        ],
+        "title": "ExchangeMapping"
+      },
+      "InternalExchange": {
+        "type": "string",
+        "enum": [
+          "kucoin",
+          "bingx",
+          "binance",
+          "bybit",
+          "hyperliquid",
+          "bitget"
+        ],
+        "title": "InternalExchange",
+        "description": "All exchanges we are using, including public (Exchange)"
+      },
+      "LogLevel": {
+        "type": "string",
+        "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        "title": "LogLevel"
+      },
+      "MarketType": {
+        "type": "string",
+        "enum": ["spot", "futures"],
+        "title": "MarketType",
+        "description": "Market types"
+      },
+      "MarketcapRanking": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp",
+            "description": "Unix timestamp of the ranking snapshot"
+          },
+          "marketcap_values": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Marketcap Values",
+            "description": "Ordered list of market cap values from highest to lowest"
+          }
+        },
+        "type": "object",
+        "required": ["timestamp", "marketcap_values"],
+        "title": "MarketcapRanking",
+        "description": "Market capitalization ranking showing sorted values at a specific timestamp."
+      },
+      "MarketcapSymbolRanking": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp",
+            "description": "Unix timestamp of the ranking snapshot"
+          },
+          "symbols": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Symbols",
+            "description": "Ordered list of symbols ranked by market cap"
+          }
+        },
+        "type": "object",
+        "required": ["timestamp", "symbols"],
+        "title": "MarketcapSymbolRanking",
+        "description": "Symbol ranking ordered by market capitalization at a specific timestamp."
+      },
+      "OHLCV": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp",
+            "description": "Unix timestamp of the candle period"
+          },
+          "open": {
+            "type": "number",
+            "title": "Open",
+            "description": "Opening price of the period"
+          },
+          "high": {
+            "type": "number",
+            "title": "High",
+            "description": "Highest price during the period"
+          },
+          "low": {
+            "type": "number",
+            "title": "Low",
+            "description": "Lowest price during the period"
+          },
+          "close": {
+            "type": "number",
+            "title": "Close",
+            "description": "Closing price of the period"
+          },
+          "volume": {
+            "type": "number",
+            "title": "Volume",
+            "description": "Trading volume during the period"
+          },
+          "marketcap": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketcap",
+            "description": "Market capitalization at period close"
+          }
+        },
+        "type": "object",
+        "required": ["timestamp", "open", "high", "low", "close", "volume"],
+        "title": "OHLCV",
+        "description": "Open, High, Low, Close, Volume candlestick data with optional market cap information."
+      },
+      "Severity": {
+        "type": "string",
+        "enum": ["ERROR", "WARNING", "CRITICAL"],
+        "title": "Severity",
+        "description": "Error severity levels for logging and monitoring systems."
+      },
+      "TimeInterval": {
+        "type": "string",
+        "enum": ["15m", "30m", "1h", "4h", "1d"],
+        "title": "TimeInterval",
+        "description": "Time interval options for aggregating market data and technical indicators."
+      },
+      "TradingStatus": {
+        "type": "string",
+        "enum": ["ACTIVE", "RETIRED", "EXPIRED"],
+        "title": "TradingStatus",
+        "description": "Trading status indicators for market availability and lifecycle management."
+      }
+    },
+    "securitySchemes": {
+      "Basic": {
+        "type": "http",
+        "description": "The username and password to use for authentication.",
+        "scheme": "basic"
+      },
+      "HTTPBearer": {
+        "type": "http",
+        "description": "The JWT to use for authentication.",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "description": "The API key to use for authentication.",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}

@@ -1,24 +1,29 @@
 import { createApiReference } from "@scalar/api-reference";
+import { manipulateDoc as manipulatePythonDoc } from "./python";
+
+type ApiEnv = "local" | "dev" | "prod";
 
 // Configuration
 export const CONFIG = {
   baseUrls: {
+    local: "http://localhost",
     dev: "https://api.crypticorn.dev",
     prod: "https://api.crypticorn.com",
   },
-  env: import.meta.env.VITE_API_ENV as "dev" | "prod",
+  env: import.meta.env.VITE_API_ENV as ApiEnv,
 };
 
 // API endpoints and titles with version
 export const API_ENDPOINTS = [
   { service: "hive", title: "Hive AI API", version: "v1" },
-  { service: "klines", title: "Klines API", version: "v1" },
   { service: "metrics", title: "Metrics API", version: "v1" },
   { service: "trade", title: "Trading API", version: "v1" },
   { service: "pay", title: "Payment API", version: "v1" },
   { service: "auth", title: "Auth API", version: "v1" },
   { service: "dex", title: "DEX API", version: "v1" },
+  { service: "notification", title: "Notification API", version: "v1" },
   // Disabled endpoints
+  // { service: "klines", title: "Klines API", version: "v1" },
   // { service: 'sentiment', title: 'Sentiment API', version: 'v1' },
   // { service: 'market', title: 'Market Data API', version: 'v1' },
   // { service: 'google', title: 'Google Trends API', version: 'v1' },
@@ -27,6 +32,10 @@ export const API_ENDPOINTS = [
 // Server configuration utilities
 function getServerConfigs(prefix: string) {
   let servers: Record<string, { url: string; description: string }> = {
+    local: {
+      url: `${CONFIG.baseUrls.local}${prefix}`,
+      description: "Local",
+    },
     dev: {
       url: `${CONFIG.baseUrls.dev}${prefix}`,
       description: "Development",
@@ -58,9 +67,13 @@ async function fetchDoc(service: string, version: string): Promise<any> {
   const url = `${root}${prefix}/openapi.json`;
 
   const res = await fetch(url);
-  const data = await res.json();
+  let data = await res.json();
+  // for testing purposes, we can import a local file
+  // let importedData = await import("./test-doc.json");
+  // let data = { ...importedData.default || importedData };
 
   data.servers = getServerConfigs(prefix);
+  data = await manipulatePythonDoc(data, service);
   return data;
 }
 
@@ -76,12 +89,24 @@ async function initializeApiReference() {
 
     // Create reference with all docs
     createApiReference("#app", {
+      // https://guides.scalar.com/scalar/scalar-api-references/configuration
       sources: API_ENDPOINTS.map((endpoint, index) => ({
         title: endpoint.title,
         content: JSON.stringify(docs[index]),
       })),
+      // hideModels: true,
+      authentication: {
+        preferredSecurityScheme: "APIKeyHeader",
+      },
+      operationsSorter: (a: any, b: any) => {
+        return a.operation.operationId.length - b.operation.operationId.length;
+      }, // sort by operationId length ascending (usually the longer the operationId, the more complex the endpoint)
+      hideClientButton: true,
+      // persistAuth: true,
+      // withDefaultFonts: false
       // Proxy option (commented out)
       // proxyUrl: 'https://proxy.scalar.com',
+      // plugins: [plugin],
     });
   } catch (error) {
     console.error("Failed to initialize API reference:", error);
