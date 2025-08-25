@@ -17,7 +17,6 @@ with SyncClient(api_key="your-api-key") as client:
 `;
 
       const pythonAsyncExample = `from crypticorn import AsyncClient
-import asyncio
 
 async with AsyncClient(api_key="your-api-key") as client:
     await client.${serverRoot}.${mainPath}.${operationId}(*args, **kwargs)
