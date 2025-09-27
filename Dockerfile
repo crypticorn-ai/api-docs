@@ -6,12 +6,11 @@ RUN npm install -g pnpm && \
 
 WORKDIR /app
 
-COPY docs/api/package.json docs/api/pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 
 RUN pnpm install --frozen-lockfile
 
-COPY docs/api .
-COPY static ./static
+COPY . .
 
 ARG VITE_API_ENV
 ENV VITE_API_ENV=$VITE_API_ENV
@@ -23,7 +22,6 @@ FROM alpine:latest
 RUN apk add --no-cache nginx
 
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY --from=build /app/static /usr/share/nginx/html/static
 COPY --from=build /app/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
