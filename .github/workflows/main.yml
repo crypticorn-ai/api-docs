@@ -1,9 +1,6 @@
 name: Deploy API docs
 on:
   push:
-    paths:
-      - docs/api/**
-      - static/**
     branches:
       - main
       - dev
