@@ -17,8 +17,7 @@ export const CONFIG = {
 export const API_ENDPOINTS = [
   { service: "hive", title: "Hive AI API", version: "v1" },
   { service: "metrics", title: "Metrics API", version: "v1" },
-  { service: "trade", title: "Trading API v1", version: "v1" },
-  { service: "trade", title: "Trading API v2", version: "v2" },
+  { service: "trade", title: "Trading API", version: "v2" },
   { service: "pay", title: "Payment API", version: "v1" },
   { service: "auth", title: "Auth API", version: "v1" },
   { service: "dex", title: "DEX API", version: "v1" },
