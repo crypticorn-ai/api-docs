@@ -1,5 +1,5 @@
 import { createApiReference } from "@scalar/api-reference";
-import { manipulateDoc as manipulatePythonDoc } from "./python";
+import { manipulateDoc } from "./utils";
 
 type ApiEnv = "local" | "dev" | "prod";
 
@@ -73,7 +73,7 @@ async function fetchDoc(service: string, version: string): Promise<any> {
   // let data = { ...importedData.default || importedData };
 
   data.servers = getServerConfigs(prefix);
-  data = await manipulatePythonDoc(data, service);
+  data = await manipulateDoc(data, service);
   return data;
 }
 
