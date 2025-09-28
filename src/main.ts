@@ -4,7 +4,7 @@ import { manipulateDoc } from "./utils";
 type ApiEnv = "local" | "dev" | "prod";
 
 // Configuration
-export const CONFIG = {
+const CONFIG = {
   baseUrls: {
     local: "http://localhost",
     dev: "https://api.crypticorn.dev",
@@ -14,7 +14,7 @@ export const CONFIG = {
 };
 
 // API endpoints and titles with version
-export const API_ENDPOINTS = [
+const API_ENDPOINTS = [
   { service: "hive", title: "Hive AI API", version: "v1" },
   { service: "metrics", title: "Metrics API", version: "v1" },
   { service: "trade", title: "Trading API", version: "v2" },
@@ -80,19 +80,33 @@ async function fetchDoc(service: string, version: string): Promise<any> {
 // API Reference initialization
 async function initializeApiReference() {
   try {
-    // Fetch all API docs
-    const docs = await Promise.all(
-      API_ENDPOINTS.map((endpoint) =>
-        fetchDoc(endpoint.service, endpoint.version)
-      )
-    );
+    // Fetch all API docs with individual error handling
+    const fetchPromises = API_ENDPOINTS.map(async (endpoint) => {
+      try {
+        const doc = await fetchDoc(endpoint.service, endpoint.version);
+        return { endpoint, doc, success: true };
+      } catch (error) {
+        console.warn(`Failed to fetch ${endpoint.service} API docs:`, error);
+        return { endpoint, doc: null, success: false };
+      }
+    });
 
-    // Create reference with all docs
+    const results = await Promise.all(fetchPromises);
+    
+    // Filter out failed fetches and create sources only for successful ones
+    const successfulResults = results.filter(result => result.success);
+    
+    if (successfulResults.length === 0) {
+      console.error("No API docs could be fetched successfully");
+      return;
+    }
+
+    // Create reference with only successful docs
     createApiReference("#app", {
       // https://guides.scalar.com/scalar/scalar-api-references/configuration
-      sources: API_ENDPOINTS.map((endpoint, index) => ({
-        title: endpoint.title,
-        content: JSON.stringify(docs[index]),
+      sources: successfulResults.map((result) => ({
+        title: result.endpoint.title,
+        content: JSON.stringify(result.doc),
       })),
       // hideModels: true,
       authentication: {
