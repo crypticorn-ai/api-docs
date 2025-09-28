@@ -1,6 +1,22 @@
 import { camelCase, snakeCase } from "change-case";
 
 export async function manipulateDoc(data: any, serverRoot: string) {
+  if (!data.info) {
+    data.info = {};
+  }
+  
+  data.info["x-scalar-sdk-installation"] = [
+    {
+      lang: "Python",
+      description: "Install our **Python SDK** from PyPI:",
+      source: "pip install crypticorn"
+    },
+    {
+      lang: "Node",
+      description: "Install our **TypeScript/JavaScript SDK** from npm:",
+      source: "npm install @crypticorn-ai/api-client"
+    }
+  ];
   for (const path in data.paths) {
     const pathItem = data.paths[path];
     for (const method of Object.keys(pathItem)) {
@@ -37,21 +53,18 @@ const result = await client.${serverRoot}.${camelCaseOperationId}(...args)
       // Append to x-codeSamples
       operation["x-codeSamples"] = operation["x-codeSamples"] || [];
       
-      // Add TypeScript example
-      operation["x-codeSamples"].push({
-        label: "TypeScript SDK",
-        lang: "TypeScript",
-        source: typescriptExample,
-      });
-      
-      // Add sync example
       operation["x-codeSamples"].push({
         label: "Python Async SDK",
         lang: "Python",
         source: pythonAsyncExample,
       });
+      
+      operation["x-codeSamples"].push({
+        label: "TypeScript SDK",
+        lang: "TypeScript",
+        source: typescriptExample,
+      });
 
-      // Add async example
       operation["x-codeSamples"].push({
         label: "Python Sync SDK", 
         lang: "Python",
