@@ -32,13 +32,13 @@ export async function manipulateDoc(data: any, serverRoot: string) {
       const pythonSyncExample = `from crypticorn import SyncClient
 
 with SyncClient(api_key="your-api-key") as client:
-    client.${serverRoot}.${mainPath}.${snakeCaseOperationId}(*args, **kwargs)
+    client.${serverRoot}.${snakeCaseOperationId}(*args, **kwargs)
 `;
 
       const pythonAsyncExample = `from crypticorn import AsyncClient
 
 async with AsyncClient(api_key="your-api-key") as client:
-    await client.${serverRoot}.${mainPath}.${snakeCaseOperationId}(*args, **kwargs)
+    await client.${serverRoot}.${snakeCaseOperationId}(*args, **kwargs)
 `;
 
       const typescriptExample = `import { AsyncClient } from '@crypticorn-ai/api-client'
