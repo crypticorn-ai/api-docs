@@ -23,9 +23,6 @@ export async function manipulateDoc(data: any, serverRoot: string) {
       const operation = pathItem[method];
       if (!operation.operationId) continue;
 
-      // Get MAIN_PATH: first non-empty segment of the path
-      const mainPath = path.split("/").filter((s) => !!s)[0] || "status";
-
       const snakeCaseOperationId = snakeCase(operation.operationId);
       const camelCaseOperationId = camelCase(operation.operationId);
 
