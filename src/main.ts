@@ -23,8 +23,8 @@ const API_ENDPOINTS = [
   { service: "dex", title: "DEX API", version: "v1" },
   { service: "notification", title: "Notification API", version: "v1" },
   { service: "indicator", title: "Indicator API", version: "v1" },
+  { service: "klines", title: "Klines API", version: "v1" },
   // Disabled endpoints
-  // { service: "klines", title: "Klines API", version: "v1" },
   // { service: 'sentiment', title: 'Sentiment API', version: 'v1' },
   // { service: 'market', title: 'Market Data API', version: 'v1' },
   // { service: 'google', title: 'Google Trends API', version: 'v1' },
