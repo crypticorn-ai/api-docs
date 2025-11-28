@@ -6,7 +6,7 @@ on:
       - dev
 env:
   AWS_REGION: eu-west-1
-  ECR_REGISTRY: 643578112146.dkr.ecr.eu-west-1.amazonaws.com
+  ECR_REGISTRY: 992272337956.dkr.ecr.eu-west-1.amazonaws.com
   ACTIONS_ROLE: arn:aws:iam::992272337956:role/GitHubActionsRole
   IMAGE_NAME: crypticorn/api-docs
   EC2_HOST: ${{ github.ref == 'refs/heads/main' && secrets.EC2_HOST || secrets.EC2_HOST_DEV }}
