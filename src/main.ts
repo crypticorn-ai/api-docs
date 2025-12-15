@@ -51,11 +51,15 @@ function getServerConfigs(prefix: string) {
   // if prod drop dev and local
   // the reason for this are:
   // - in the public documentation, we only want to show prod servers
-  // - in the other environments, we want to show all servers
+  // - in the other environments, we want to show all servers except local
   // - local (dev) is compatible with the dev&prod (prod) environments, but not vice versa, which means that the generated reference on prod will not work on dev or local, but the reverse is true
 
   if (CONFIG.env === "prod") {
     delete servers.dev;
+    delete servers.local;
+  }
+  if (CONFIG.env === "dev") {
+    delete servers.local;
   }
   // convert to an array
   return Object.values(servers);
