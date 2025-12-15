@@ -20,7 +20,7 @@ const API_ENDPOINTS = [
   { service: "trade", title: "Trading API", version: "v2" },
   { service: "pay", title: "Payment API", version: "v1" },
   { service: "auth", title: "Auth API", version: "v1" },
-  { service: "dex", title: "DEX API", version: "v1" },
+  { service: "dex", title: "DEX API", version: "v2" },
   { service: "notification", title: "Notification API", version: "v1" },
   { service: "indicator", title: "Indicator API", version: "v1" },
   { service: "klines", title: "Klines API", version: "v1" },
