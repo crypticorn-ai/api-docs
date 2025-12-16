@@ -8,12 +8,12 @@ export async function manipulateDoc(data: any, serverRoot: string) {
   data.info["x-scalar-sdk-installation"] = [
     {
       lang: "Python",
-      description: "Install our **Python SDK** from PyPI:",
+      description: "Install our [**Python SDK**](https://pypi.org/project/crypticorn/) from PyPI:",
       source: "pip install crypticorn"
     },
     {
       lang: "Node",
-      description: "Install our **TypeScript/JavaScript SDK** from npm:",
+      description: "Install our [**TypeScript/JavaScript SDK**](https://github.com/crypticorn-ai/api-client-typescript/pkgs/npm/api-client) from npm:",
       source: "npm install @crypticorn-ai/api-client"
     }
   ];

@@ -101,18 +101,40 @@ async function initializeApiReference() {
     // Filter out failed fetches and create sources only for successful ones
     const successfulResults = results.filter(result => result.success);
     
-    if (successfulResults.length === 0) {
-      console.error("No API docs could be fetched successfully");
-      return;
-    }
-
-    // Create reference with only successful docs
+    // Create reference with base doc as first (landing page) and then other docs
     createApiReference("#app", {
       // https://guides.scalar.com/scalar/scalar-api-references/configuration
-      sources: successfulResults.map((result) => ({
-        title: result.endpoint.title,
-        content: JSON.stringify(result.doc),
-      })),
+      sources: [
+        {
+          title: "API Documentation",
+          content: JSON.stringify({
+            servers: getServerConfigs(""),
+            info: {
+              description: `Welcome to Crypticorn API!
+
+## Authentication
+
+Get your API key from [Account Settings](https://app.crypticorn.com/account/settings) and include it in the \`X-API-Key\` header.`,
+              "x-scalar-sdk-installation": [
+                {
+                  lang: "Python",
+                  description: "Install our [**Python SDK**](https://pypi.org/project/crypticorn/) from PyPI:",
+                  source: "pip install crypticorn"
+                },
+                {
+                  lang: "Node",
+                  description: "Install our [**TypeScript/JavaScript SDK**](https://github.com/crypticorn-ai/api-client-typescript/pkgs/npm/api-client) from npm:",
+                  source: "npm install @crypticorn-ai/api-client"
+                }
+              ]
+            }
+          }),
+        },
+        ...successfulResults.map((result) => ({
+          title: result.endpoint.title,
+          content: JSON.stringify(result.doc),
+        })),
+      ],
       // hideModels: true,
       authentication: {
         preferredSecurityScheme: "APIKeyHeader",
