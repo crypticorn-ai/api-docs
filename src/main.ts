@@ -1,5 +1,6 @@
 import { createApiReference } from "@scalar/api-reference";
 import { manipulateDoc } from "./utils";
+import landingDoc from "./landing.json";
 
 type ApiEnv = "local" | "dev" | "prod";
 
@@ -101,34 +102,18 @@ async function initializeApiReference() {
     // Filter out failed fetches and create sources only for successful ones
     const successfulResults = results.filter(result => result.success);
     
+    // Load and process landing page doc
+    let landingData: any = { ...landingDoc };
+    landingData.servers = getServerConfigs("");
+    landingData = await manipulateDoc(landingData, "");
+
     // Create reference with base doc as first (landing page) and then other docs
     createApiReference("#app", {
       // https://guides.scalar.com/scalar/scalar-api-references/configuration
       sources: [
         {
-          title: "API Documentation",
-          content: JSON.stringify({
-            servers: getServerConfigs(""),
-            info: {
-              description: `Welcome to Crypticorn API!
-
-## Authentication
-
-Get your API key from [Account Settings](https://app.crypticorn.com/account/settings) and include it in the \`X-API-Key\` header.`,
-              "x-scalar-sdk-installation": [
-                {
-                  lang: "Python",
-                  description: "Install our [**Python SDK**](https://pypi.org/project/crypticorn/) from PyPI:",
-                  source: "pip install crypticorn"
-                },
-                {
-                  lang: "Node",
-                  description: "Install our [**TypeScript/JavaScript SDK**](https://github.com/crypticorn-ai/api-client-typescript/pkgs/npm/api-client) from npm:",
-                  source: "npm install @crypticorn-ai/api-client"
-                }
-              ]
-            }
-          }),
+          title: landingData.info?.title,
+          content: JSON.stringify(landingData),
         },
         ...successfulResults.map((result) => ({
           title: result.endpoint.title,

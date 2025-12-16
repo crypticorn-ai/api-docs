@@ -1,0 +1,9 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Introduction",
+    "description": "Welcome to Crypticorn API!\n\n## Authentication\n\nGet your API key from [Account Settings](https://app.crypticorn.com/account/settings) and include it in the `X-API-Key` header.\n\n## Available APIs\n\nThe following APIs are available:\n- [Hive AI API](/?api=hive-ai-api)\n- [Metrics API](/?api=metrics-api)\n- [Trading API](/?api=trading-api)\n- [Payment API](/?api=payment-api)\n- [Auth API](/?api=auth-api)\n- [DEX API](/?api=dex-api)\n- [Notification API](/?api=notification-api)\n- [Indicator API](/?api=indicator-api)\n- [Klines API](/?api=klines-api)",
+    "version": "1.0.0"
+  }
+}
+
