@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Introduction",
-    "description": "Welcome to Crypticorn API!\n\n## Authentication\n\nGet your API key from [Account Settings](https://app.crypticorn.com/account/settings) and include it in the `X-API-Key` header.\n\n## Available APIs\n\nThe following APIs are available:\n- [Hive AI API](/docs//?api=hive-ai-api)\n- [Metrics API](/docs//?api=metrics-api)\n- [Trading API](/docs//?api=trading-api)\n- [Payment API](/docs//?api=payment-api)\n- [Auth API](/docs//?api=auth-api)\n- [DEX API](/docs//?api=dex-api)\n- [Notification API](/docs//?api=notification-api)\n- [Indicator API](/docs//?api=indicator-api)\n- [Klines API](/docs//?api=klines-api)",
+    "description": "Welcome to Crypticorn API!\n\n## SDKs\n\n- [Python SDK](https://pypi.org/project/crypticorn/)\n- [Node SDK](https://github.com/crypticorn-ai/api-client-typescript/pkgs/npm/api-client)\n\n## Authentication\n\nGet your API key from [Account Settings](https://app.crypticorn.com/account/settings) and include it in the `X-API-Key` header.\n\n## Available APIs\n\nThe following APIs are available:\n- [Hive AI API](/docs//?api=hive-ai-api)\n- [Metrics API](/docs//?api=metrics-api)\n- [Trading API](/docs//?api=trading-api)\n- [Payment API](/docs//?api=payment-api)\n- [Auth API](/docs//?api=auth-api)\n- [DEX API](/docs//?api=dex-api)\n- [Notification API](/docs//?api=notification-api)\n- [Indicator API](/docs//?api=indicator-api)\n- [Klines API](/docs//?api=klines-api)",
     "version": "1.0.0"
   }
 }
